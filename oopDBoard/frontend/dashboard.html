@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+
+    <h1>Welcome to dash</h1>
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Delete</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody id="usersTableBody">
+        </tbody>
+    </table>
+
+    <script>
+        fetch('api/get_users.php', {
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+
+            if (data.status === 'success' && data.data.length > 0) {
+                data.data.forEach(user => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>
+                            <form action="api/delete_user.php" method="POST" onsubmit="return confirm('Are you sure?');">
+                                <input type="hidden" name="id" value="${user.id}">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="update_user.html" method="GET">
+                                <input type="hidden" name="id" value="${user.id}">
+                                <button type="submit">Update</button>
+                            </form>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="4">No users found.</td></tr>';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    </script>
+
+</body>
+</html>

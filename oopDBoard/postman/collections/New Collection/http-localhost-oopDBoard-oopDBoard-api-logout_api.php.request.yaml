@@ -1,0 +1,15 @@
+$kind: http-request
+name: http://localhost/oopDBoard/oopDBoard/api/logout_api.php
+description: ""
+url: http://localhost/oopDBoard/oopDBoard/api/logout_api.php
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"email\": \"raghad@example.com\",\r
+
+    \    \"password\": \"securepassword123\"\r
+
+    }"
+order: 1000
